@@ -1,120 +1,124 @@
-// Games Data with Real Images
+// Professional Game Store Database
 const games = [
     {
         id: 1,
         name: 'Shadow Quest',
         category: 'action',
-        description: 'An intense action game with stunning graphics and challenging combat. Join the shadow warriors and fight against dark forces in mysterious realms. Features: 50+ levels, multiplayer mode, dynamic combat system.',
-        image: '🗡️',
-        icon: 'fas fa-dragon',
-        rating: '⭐ 4.8/5',
-        color1: '#667eea',
-        color2: '#764ba2'
+        description: 'An epic action-packed adventure where you battle shadows in a mystical realm. Features fast-paced combat, stunning graphics, and challenging boss fights. Explore dark dungeons and uncover ancient secrets.',
+        emoji: '🗡️',
+        rating: '4.8/5',
+        ratingNum: 4.8
     },
     {
         id: 2,
         name: 'Puzzle Master',
         category: 'puzzle',
-        description: 'Challenge your mind with thousands of engaging and fun puzzles. Progressive difficulty from easy to extremely hard levels. Features: 500+ puzzles, achievements, daily challenges, leaderboards.',
-        image: '🧩',
-        icon: 'fas fa-puzzle-piece',
-        rating: '⭐ 4.6/5',
-        color1: '#764ba2',
-        color2: '#f093fb'
+        description: 'Test your brain with thousands of challenging puzzles. From easy warm-ups to impossibly hard levels, this game provides endless entertainment. Perfect for puzzle enthusiasts of all skill levels.',
+        emoji: '🧩',
+        rating: '4.6/5',
+        ratingNum: 4.6
     },
     {
         id: 3,
         name: 'Football Champion',
         category: 'sports',
-        description: 'Official football game featuring world\'s best teams and players. Play official matches and international tournaments. Features: Real teams, realistic physics, career mode, online multiplayer.',
-        image: '⚽',
-        icon: 'fas fa-basketball',
-        rating: '⭐ 4.9/5',
-        color1: '#f39c12',
-        color2: '#e67e22'
+        description: 'The ultimate football simulation featuring real teams, players, and stadiums. Play competitive matches, build your ultimate team, and compete in worldwide tournaments. Experience authentic football gameplay.',
+        emoji: '⚽',
+        rating: '4.9/5',
+        ratingNum: 4.9
     },
     {
         id: 4,
         name: 'Dragon\'s Treasure',
         category: 'adventure',
-        description: 'An epic adventure journey through fantastical worlds filled with secrets and hidden treasures. Discover ancient dragon mysteries and legendary artifacts. Features: Vast open world, dragons, quests, exploration.',
-        image: '🐉',
-        icon: 'fas fa-dragon',
-        rating: '⭐ 4.7/5',
-        color1: '#2ecc71',
-        color2: '#27ae60'
+        description: 'Embark on an epic adventure through mystical lands filled with treasures and secrets. Discover ancient dragon lairs, solve magical puzzles, and collect legendary artifacts in this thrilling fantasy quest.',
+        emoji: '🐉',
+        rating: '4.7/5',
+        ratingNum: 4.7
     },
     {
         id: 5,
         name: 'War Tactics',
         category: 'strategy',
-        description: 'Strategic warfare game requiring smart planning and tactical decisions. Build your empire and command massive armies. Features: Real-time strategy, empire building, alliance system, PvP battles.',
-        image: '⚔️',
-        icon: 'fas fa-chess',
-        rating: '⭐ 4.5/5',
-        color1: '#e74c3c',
-        color2: '#c0392b'
+        description: 'Command armies, plan strategies, and conquer territories in this turn-based strategy game. Build your empire, research technologies, and outsmart opponents. Requires tactical thinking and long-term planning.',
+        emoji: '⚔️',
+        rating: '4.5/5',
+        ratingNum: 4.5
     }
 ];
 
-let filteredGames = [...games];
 let currentCategory = 'all';
+let filteredGames = [...games];
+let wishlist = [];
 
-// Display Games
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    displayGames(games);
+    setupCategoryLinks();
+    loadWishlist();
+});
+
+// Display games in grid
 function displayGames(gamesToDisplay) {
     const gamesGrid = document.getElementById('gamesGrid');
     
     if (gamesToDisplay.length === 0) {
         gamesGrid.innerHTML = `
-            <div class="no-results">
+            <div class="no-results" style="grid-column: 1/-1;">
                 <div class="no-results-icon">🎮</div>
-                <p>No games match your search</p>
+                <p>No games found matching your search.</p>
             </div>
         `;
         return;
     }
-    
+
     gamesGrid.innerHTML = gamesToDisplay.map(game => `
         <div class="game-card" onclick="openModal(${game.id})">
-            <div class="game-card-image" style="background: linear-gradient(135deg, ${game.color1} 0%, ${game.color2} 100%);">
-                <span style="font-size: 80px;">${game.image}</span>
-                <div class="game-card-badge">Featured</div>
-            </div>
+            <div class="game-card-image">${game.emoji}</div>
             <div class="game-card-body">
                 <h3>${game.name}</h3>
                 <p>${game.description}</p>
-                <div class="game-card-meta">
-                    <span class="category-badge">${getCategoryName(game.category)}</span>
-                    <span class="rating">${game.rating}</span>
+                <div class="game-card-footer">
+                    <span class="category-badge">${formatCategory(game.category)}</span>
+                    <span class="rating">⭐ ${game.rating}</span>
                 </div>
             </div>
         </div>
     `).join('');
 }
 
-// Get Category Name
-function getCategoryName(category) {
+// Format category name
+function formatCategory(category) {
     const categories = {
         'action': 'Action',
         'puzzle': 'Puzzle',
         'sports': 'Sports',
         'adventure': 'Adventure',
-        'strategy': 'Strategy',
-        'all': 'All Games'
+        'strategy': 'Strategy'
     };
     return categories[category] || category;
 }
 
-// Filter by Category
+// Setup category filter links
+function setupCategoryLinks() {
+    document.querySelectorAll('.category-link').forEach(link => {
+        if (link.textContent.includes('All Games')) {
+            link.classList.add('active');
+        }
+    });
+}
+
+// Filter by category
 function filterCategory(category) {
     currentCategory = category;
     
-    // Update active links
+    // Update active link
     document.querySelectorAll('.category-link').forEach(link => {
         link.classList.remove('active');
     });
     event.target.closest('.category-link').classList.add('active');
     
+    // Filter games
     if (category === 'all') {
         filteredGames = [...games];
     } else {
@@ -130,46 +134,51 @@ function filterCategory(category) {
     }
 }
 
-// Search Games
+// Search games
 function searchGames() {
-    const searchInput = document.getElementById('searchInput').value.toLowerCase();
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
     
-    if (currentCategory === 'all') {
-        const results = games.filter(game => 
-            game.name.toLowerCase().includes(searchInput) ||
-            game.description.toLowerCase().includes(searchInput)
-        );
-        displayGames(results);
-    } else {
-        const results = filteredGames.filter(game => 
-            game.name.toLowerCase().includes(searchInput) ||
-            game.description.toLowerCase().includes(searchInput)
-        );
-        displayGames(results);
-    }
+    let baseGames = currentCategory === 'all' ? games : filteredGames;
+    
+    const results = baseGames.filter(game => 
+        game.name.toLowerCase().includes(searchTerm) ||
+        game.description.toLowerCase().includes(searchTerm)
+    );
+    
+    displayGames(results);
 }
 
-// Open Modal
+// Open game modal
 function openModal(gameId) {
     const game = games.find(g => g.id === gameId);
     if (!game) return;
     
-    document.getElementById('modalImage').style.background = `linear-gradient(135deg, ${game.color1} 0%, ${game.color2} 100%)`;
-    document.getElementById('modalImage').innerHTML = `<span style="font-size: 120px; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;">${game.image}</span>`;
+    document.getElementById('modalImage').textContent = game.emoji;
     document.getElementById('modalTitle').textContent = game.name;
     document.getElementById('modalDescription').textContent = game.description;
-    document.getElementById('modalCategory').textContent = getCategoryName(game.category);
-    document.getElementById('modalRating').textContent = game.rating;
+    document.getElementById('modalCategory').textContent = formatCategory(game.category);
+    document.getElementById('modalRating').innerHTML = `⭐ ${game.rating}`;
+    
+    // Update wishlist button
+    const wishlistBtn = document.querySelector('.wishlist-btn');
+    if (wishlist.includes(gameId)) {
+        wishlistBtn.classList.add('added');
+    } else {
+        wishlistBtn.classList.remove('added');
+    }
+    
+    // Store current game ID for wishlist function
+    wishlistBtn.dataset.gameId = gameId;
     
     document.getElementById('gameModal').style.display = 'block';
 }
 
-// Close Modal
+// Close modal
 function closeModal() {
     document.getElementById('gameModal').style.display = 'none';
 }
 
-// Close Modal on Outside Click
+// Close modal on outside click
 window.onclick = function(event) {
     const modal = document.getElementById('gameModal');
     if (event.target === modal || event.target.classList.contains('modal-overlay')) {
@@ -177,16 +186,32 @@ window.onclick = function(event) {
     }
 }
 
-// Toggle Wishlist
+// Toggle wishlist
 function toggleWishlist() {
-    const btn = event.target.closest('.wishlist-btn');
-    btn.classList.toggle('active');
+    const wishlistBtn = document.querySelector('.wishlist-btn');
+    const gameId = parseInt(wishlistBtn.dataset.gameId);
+    
+    const index = wishlist.indexOf(gameId);
+    if (index > -1) {
+        wishlist.splice(index, 1);
+        wishlistBtn.classList.remove('added');
+    } else {
+        wishlist.push(gameId);
+        wishlistBtn.classList.add('added');
+    }
+    
+    saveWishlist();
 }
 
-// Initialize
-document.addEventListener('DOMContentLoaded', function() {
-    displayGames(games);
-    
-    // Set first category as active
-    document.querySelector('.category-link').classList.add('active');
-});
+// Save wishlist to localStorage
+function saveWishlist() {
+    localStorage.setItem('appZoneWishlist', JSON.stringify(wishlist));
+}
+
+// Load wishlist from localStorage
+function loadWishlist() {
+    const saved = localStorage.getItem('appZoneWishlist');
+    if (saved) {
+        wishlist = JSON.parse(saved);
+    }
+}
