@@ -1,60 +1,139 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App Zone - متجر الألعاب</title>
+    <title>App Zone - Professional Game Store</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="container">
-        <!-- القائمة الجانبية -->
-        <nav class="sidebar">
-            <div class="logo">
-                <h1>🎮 App Zone</h1>
+    <div class="wrapper">
+        <!-- Header/Navigation -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <h1 class="logo">🎮 App Zone</h1>
+                    <p class="tagline">Premium Gaming Store</p>
+                </div>
+                <div class="search-container-header">
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        placeholder="Search games..."
+                        onkeyup="searchGames()"
+                        class="search-input-header"
+                    >
+                    <i class="fas fa-search search-icon"></i>
+                </div>
             </div>
-            <ul class="menu">
-                <li><a href="#" onclick="filterCategory('all'); return false;" class="active">جميع الألعاب</a></li>
-                <li><a href="#" onclick="filterCategory('action'); return false;">ألعاب أكشن</a></li>
-                <li><a href="#" onclick="filterCategory('puzzle'); return false;">ألعاب الألغاز</a></li>
-                <li><a href="#" onclick="filterCategory('sports'); return false;">ألعاب رياضية</a></li>
-                <li><a href="#" onclick="filterCategory('adventure'); return false;">ألعاب المغامرات</a></li>
-                <li><a href="#" onclick="filterCategory('strategy'); return false;">ألعاب الاستراتيجية</a></li>
-            </ul>
-        </nav>
+        </header>
 
-        <!-- المحتوى الرئيسي -->
-        <div class="main-content">
-            <!-- شريط البحث -->
-            <div class="search-bar">
-                <input 
-                    type="text" 
-                    id="searchInput" 
-                    placeholder="🔍 ابحث عن لعبة..."
-                    onkeyup="searchGames()"
-                >
-            </div>
+        <!-- Main Container -->
+        <div class="container">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">
+                        <i class="fas fa-filter"></i> Categories
+                    </h3>
+                    <ul class="category-menu">
+                        <li><a href="#" onclick="filterCategory('all'); return false;" class="category-link active">
+                            <i class="fas fa-gamepad"></i> All Games
+                        </a></li>
+                        <li><a href="#" onclick="filterCategory('action'); return false;" class="category-link">
+                            <i class="fas fa-explosion"></i> Action
+                        </a></li>
+                        <li><a href="#" onclick="filterCategory('puzzle'); return false;" class="category-link">
+                            <i class="fas fa-puzzle-piece"></i> Puzzle
+                        </a></li>
+                        <li><a href="#" onclick="filterCategory('sports'); return false;" class="category-link">
+                            <i class="fas fa-basketball"></i> Sports
+                        </a></li>
+                        <li><a href="#" onclick="filterCategory('adventure'); return false;" class="category-link">
+                            <i class="fas fa-dragon"></i> Adventure
+                        </a></li>
+                        <li><a href="#" onclick="filterCategory('strategy'); return false;" class="category-link">
+                            <i class="fas fa-chess"></i> Strategy
+                        </a></li>
+                    </ul>
+                </div>
 
-            <!-- شبكة الألعاب -->
-            <div class="games-grid" id="gamesGrid">
-                <!-- سيتم ملء الألعاب هنا بواسطة JavaScript -->
-            </div>
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">
+                        <i class="fas fa-star"></i> Top Rated
+                    </h3>
+                    <div class="top-rated-games">
+                        <div class="top-game" onclick="openModal(3)">
+                            <span class="rank">1</span>
+                            <div class="top-game-info">
+                                <p>Football Champion</p>
+                                <p class="rating">⭐ 4.9</p>
+                            </div>
+                        </div>
+                        <div class="top-game" onclick="openModal(1)">
+                            <span class="rank">2</span>
+                            <div class="top-game-info">
+                                <p>Shadow Quest</p>
+                                <p class="rating">⭐ 4.8</p>
+                            </div>
+                        </div>
+                        <div class="top-game" onclick="openModal(4)">
+                            <span class="rank">3</span>
+                            <div class="top-game-info">
+                                <p>Dragon's Treasure</p>
+                                <p class="rating">⭐ 4.7</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Featured Section -->
+                <section class="featured-section">
+                    <div class="featured-header">
+                        <h2>Featured Games</h2>
+                        <span class="featured-badge">Hot Deals</span>
+                    </div>
+                </section>
+
+                <!-- Games Grid -->
+                <div class="games-grid" id="gamesGrid">
+                    <!-- Games will be loaded here by JavaScript -->
+                </div>
+            </main>
         </div>
     </div>
 
-    <!-- Modal للتفاصيل -->
+    <!-- Game Modal -->
     <div id="gameModal" class="modal">
+        <div class="modal-overlay"></div>
         <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
+            <button class="modal-close" onclick="closeModal()">
+                <i class="fas fa-times"></i>
+            </button>
             <div class="modal-body">
-                <img id="modalImage" src="" alt="">
-                <h2 id="modalTitle"></h2>
-                <p id="modalDescription"></p>
-                <p id="modalCategory"></p>
-                <p id="modalRating"></p>
-                <a id="downloadBtn" href="https://appzone771.blogspot.com/?m=1" target="_blank" class="download-btn">
-                    📥 تنزيل اللعبة
-                </a>
+                <div class="modal-image-container">
+                    <img id="modalImage" src="" alt="" class="modal-image">
+                </div>
+                <div class="modal-info">
+                    <h2 id="modalTitle" class="modal-title"></h2>
+                    <div class="modal-meta">
+                        <span class="modal-category" id="modalCategory"></span>
+                        <span class="modal-rating" id="modalRating"></span>
+                    </div>
+                    <p id="modalDescription" class="modal-description"></p>
+                    <div class="modal-footer">
+                        <a id="downloadBtn" href="https://appzone771.blogspot.com/?m=1" target="_blank" class="download-btn">
+                            <i class="fas fa-download"></i> Download Now
+                        </a>
+                        <button class="wishlist-btn" onclick="toggleWishlist()">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
